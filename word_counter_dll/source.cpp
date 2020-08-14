@@ -10,10 +10,6 @@ extern "C" __declspec(dllexport) void map(const string & inputName, const string
 	outputValue = to_string(1);
 }
 
-extern "C" __declspec(dllexport) int test(int a) {
-	return a;
-}
-
 //extern "C" __declspec(dllexport) pair<string, string> reduce(const string& name)
 //{
 //	

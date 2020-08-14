@@ -5,6 +5,8 @@
 #ifndef TASKS_POOL_H
 #define TASKS_POOL_H
 
+typedef void (*map_func_t)(const std::string&, const std::string&, std::string&, std::string&);
+
 class TasksPool
 {
 public:
