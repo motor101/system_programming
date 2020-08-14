@@ -26,6 +26,7 @@ private:
 	const char* data;
 	map_func_t mapFunction;
 	reduce_func_t reduceFunction;
+	HMODULE dllHandle;
 };
 
 

@@ -19,20 +19,20 @@ WorkersPool::WorkersPool(const char* dllPath, int threadsCount, TasksPool& tasks
 	delimiters(delimiters),
 	data(data)
 {
-	HMODULE handle = LoadLibraryA(dllPath);
-	if (handle == nullptr) {
+	dllHandle = LoadLibraryA(dllPath);
+	if (dllHandle == nullptr) {
 		throw exception("The DLL could not be loaded");
 	}
 
 	cout << "The DLL was successfully loaded" << endl;
 
-	mapFunction = reinterpret_cast<map_func_t>(GetProcAddress(handle, "map"));
+	mapFunction = reinterpret_cast<map_func_t>(GetProcAddress(dllHandle, "map"));
 
 	if (mapFunction == nullptr) {
 		throw exception("The map function wasn't found in the dll");
 	}
 
-	reduceFunction = reinterpret_cast<reduce_func_t>(GetProcAddress(handle, "reduce"));
+	reduceFunction = reinterpret_cast<reduce_func_t>(GetProcAddress(dllHandle, "reduce"));
 	
 	if (reduceFunction == nullptr) {
 		throw exception("The reduce function wasn't found in the dll");
@@ -103,5 +103,5 @@ void WorkersPool::writeMapReduceOutputToFile(const char* filePath)
 
 WorkersPool::~WorkersPool()
 {
-
+	FreeLibrary(dllHandle);
 }
