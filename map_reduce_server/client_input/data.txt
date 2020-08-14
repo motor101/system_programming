@@ -1,0 +1,4 @@
+Apple banana
+Banana Apple
+Hello, how are you? Are you feeling well.
+Are you hungry?
