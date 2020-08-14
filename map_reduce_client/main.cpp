@@ -13,10 +13,12 @@ int main()
     uint32_t inputBlockDivisionSizeInBytes = 2;
 
     IPCWithServer ipc("../word_counter_dll/x64/Release/word_counter_dll.dll",
-        "../input_data/karamazov.txt", WORD_ENTITY, delimeters,
+        "../input_data/karamazov.txt", "output/map_reduce.txt", WORD_ENTITY, delimeters,
         threadsCount, inputBlockDivisionSizeInBytes);
     
     ipc.sendInputToServer();
+
+    ipc.waitForOutputFromServer();
 
     return 0;
 }

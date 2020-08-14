@@ -9,10 +9,13 @@ class IPCWithServer
 {
 public:
 	IPCWithServer(const char *pathToDll, const char *pathToDataFile,
-		ProcessingEntity processingEntity, const char* delimeters,
-		uint32_t threadsCount, uint32_t inputBlockDivisionSizeInBytes);
+		const char* pathToOutputFile, ProcessingEntity processingEntity,
+		const char* delimeters, uint32_t threadsCount,
+		uint32_t inputBlockDivisionSizeInBytes);
 
 	void sendInputToServer();
+
+	void waitForOutputFromServer();
 
 	~IPCWithServer();
 
@@ -25,6 +28,7 @@ private:
 
 	const char *pathToDll;
 	const char *pathToDataFile;
+	const char *pathToOutputFile;
 	const char *delimeters;
 	const ProcessingEntity processingEntity;
 

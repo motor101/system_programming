@@ -25,6 +25,8 @@ public:
 
 	void readClientInput();
 
+	void sendOutputToClient();
+
 	int getThreadsCount();
 
 	int getInputBlockDivisionSizeInBytes();

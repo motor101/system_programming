@@ -8,10 +8,12 @@ using namespace std;
 LPCSTR IPCWithServer::pipeName = "\\\\.\\pipe\\map_reduce";
 
 IPCWithServer::IPCWithServer(const char* pathToDll, const char* pathToDataFile,
-    ProcessingEntity processingEntity, const char* delimeters,
-    uint32_t threadsCount, uint32_t inputBlockDivisionSizeInBytes)
+    const char* pathToOutputFile, ProcessingEntity processingEntity,
+    const char* delimeters, uint32_t threadsCount,
+    uint32_t inputBlockDivisionSizeInBytes)
     :pathToDll(pathToDll),
     pathToDataFile(pathToDataFile),
+    pathToOutputFile(pathToOutputFile),
     processingEntity(processingEntity),
     delimeters(delimeters),
     threadsCount(threadsCount),
@@ -48,6 +50,11 @@ void IPCWithServer::sendInputToServer()
     writeStringToPipe(pHandle, delimeters);
     writeNumberToPipe(pHandle, threadsCount);
     writeNumberToPipe(pHandle, inputBlockDivisionSizeInBytes);
+}
+
+void IPCWithServer::waitForOutputFromServer()
+{
+    readFileFromPipe(pHandle, pathToOutputFile, readAndWriteBuffer, nBufferSize);
 }
 
 IPCWithServer::~IPCWithServer()

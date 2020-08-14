@@ -59,6 +59,12 @@ BOOL IPCWithClient::waitForClientToConnect()
 	return ConnectNamedPipe(dataPipeHandle, nullptr);
 }
 
+void IPCWithClient::sendOutputToClient()
+{
+	writeFileToPipe(dataPipeHandle, mapReduceOutputFilePath, 
+		dataPipeReadAndWriteBuffer, nBufferSize);
+}
+
 void IPCWithClient::readClientInput()
 {
 	const char* pathToDll = (clientInputDirName + dllFileName).c_str();

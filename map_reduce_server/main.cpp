@@ -45,5 +45,12 @@ int main()
     
     workerPool.writeMapReduceOutputToFile(IPCWithClient::mapReduceOutputFilePath);
 
+    cout << "Sending the map reduce output to the client " << endl;
+
+    clientCommunication.sendOutputToClient();
+
+    // wait 2 seconds for the client to read the map reduce output
+    Sleep(2000);
+
     return 0;
 }
