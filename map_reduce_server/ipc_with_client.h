@@ -13,6 +13,7 @@ public:
 	static const std::string clientInputDirName;
 	static const std::string dllFileName;
 	static const std::string dataFileName;
+	static const char* mapReduceOutputFilePath;
 
 	static std::string getDataFilePath();
 

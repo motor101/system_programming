@@ -1,11 +1,15 @@
 #include <vector>
 #include <mutex>
+#include <map>
 #include "processing_entity.h"
 
 #ifndef TASKS_POOL_H
 #define TASKS_POOL_H
 
 typedef void (*map_func_t)(const std::string&, const std::string&, std::string&, std::string&);
+typedef void (*reduce_func_t)(const std::multimap<std::string, std::string>::iterator&,
+	const std::multimap<std::string, std::string>::iterator&,
+	std::string&, std::string&);
 
 class TasksPool
 {

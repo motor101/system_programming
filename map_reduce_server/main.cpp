@@ -34,8 +34,6 @@ int main()
                         clientCommunication.getProcessingEntity(),
                         clientCommunication.getInputBlockDivisionSizeInBytes());
     cout << "Tasks are ready to be given to the workers" << endl;
-
-
     
     WorkersPool workerPool(clientCommunication.getDLLFilePath().c_str(),
         clientCommunication.getThreadsCount(), tasksPool,
@@ -43,30 +41,9 @@ int main()
 
     workerPool.startWorkers();
 
-
+    cout << "Saving the map reduce output in " << IPCWithClient::mapReduceOutputFilePath << endl;
+    
+    workerPool.writeMapReduceOutputToFile(IPCWithClient::mapReduceOutputFilePath);
 
     return 0;
 }
-
-
-
-
-
-//cout << "tasks count is " << tasksPool.getTasksCount() << endl;
-//
-//    pair<int, int> argument;
-//
-//    const char* data = tasksPool.getData();
-//
-//    int j = 0;
-//
-//    while (tasksPool.nextTask(argument)) {
-//        
-//        cout << "task " << j++ << ": ";
-//        
-//        for (int i = argument.first; i < argument.second; ++i) {
-//            cout << data[i];
-//        }
-//        
-//        cout << endl;
-//    }

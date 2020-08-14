@@ -9,6 +9,7 @@ using namespace std;
 const std::string IPCWithClient::clientInputDirName = "client_input/";
 const std::string IPCWithClient::dllFileName = "map_reduce.dll";
 const std::string IPCWithClient::dataFileName = "data.txt";
+const char* IPCWithClient::mapReduceOutputFilePath = "output/map_reduce.txt";
 LPCSTR IPCWithClient::dataPipeName = "\\\\.\\pipe\\map_reduce";
 LPCSTR IPCWithClient::debugPipeName = "\\\\.\\pipe\\map_reduce_debug";
 
@@ -25,7 +26,6 @@ string IPCWithClient::getDLLFilePath()
 
 IPCWithClient::IPCWithClient()
 {
-	cout << nBufferSize << endl;
 	createDebugPipe();
 	createDataPipe();
 }
