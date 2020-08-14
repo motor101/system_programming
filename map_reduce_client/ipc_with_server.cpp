@@ -8,11 +8,14 @@ using namespace std;
 LPCSTR IPCWithServer::pipeName = "\\\\.\\pipe\\map_reduce";
 
 IPCWithServer::IPCWithServer(const char* pathToDll, const char* pathToDataFile,
-    ProcessingEntity processingEntity, const char* delimeters)
+    ProcessingEntity processingEntity, const char* delimeters,
+    uint32_t threadsCount, uint32_t inputBlockDivisionSizeInBytes)
     :pathToDll(pathToDll),
     pathToDataFile(pathToDataFile),
     processingEntity(processingEntity),
-    delimeters(delimeters)
+    delimeters(delimeters),
+    threadsCount(threadsCount),
+    inputBlockDivisionSizeInBytes(inputBlockDivisionSizeInBytes)
 {
     pHandle = CreateFileA(
         pipeName,
@@ -39,15 +42,12 @@ IPCWithServer::IPCWithServer(const char* pathToDll, const char* pathToDataFile,
 
 void IPCWithServer::sendInputToServer()
 {
-    //cout << writeNumberToPipe(pHandle, 123456) << endl;
-    //cout << writeFileToPipe(pHandle, "hello.txt", readAndWriteBuffer, nBufferSize);
-    ////writeFileToPipe(pHandle, pathToDll, readAndWriteBuffer, nBufferSize);
-    //cout << writeStringToPipe(pHandle, "hello there");
-
     writeFileToPipe(pHandle, pathToDll, readAndWriteBuffer, nBufferSize);
     writeFileToPipe(pHandle, pathToDataFile, readAndWriteBuffer, nBufferSize);
     writeNumberToPipe(pHandle, static_cast<uint32_t>(processingEntity));
     writeStringToPipe(pHandle, delimeters);
+    writeNumberToPipe(pHandle, threadsCount);
+    writeNumberToPipe(pHandle, inputBlockDivisionSizeInBytes);
 }
 
 IPCWithServer::~IPCWithServer()

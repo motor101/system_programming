@@ -7,7 +7,7 @@ extern "C" __declspec(dllexport) void map(const string & inputName, const string
 	string & outputName, string & outputValue)
 {
 	outputName = inputValue;
-	outputValue = to_string(5);
+	outputValue = to_string(1);
 }
 
 extern "C" __declspec(dllexport) int test(int a) {

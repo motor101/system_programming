@@ -1,17 +1,11 @@
 #include <windows.h>
 #include <string>
 #include <vector>
+#include "processing_entity.h"
+
 
 #ifndef IPC_WITH_CLIENT_H
 #define IPC_WITH_CLIENT_H
-
-enum ProcessingEntity
-{
-	SYMBOL_ENTITY,
-	WORD_ENTITY,
-	LINE_ENTITY,
-	PROCESSING_ENTITY_COUNT
-};
 
 class IPCWithClient
 {
@@ -20,11 +14,23 @@ public:
 	static const std::string dllFileName;
 	static const std::string dataFileName;
 
+	static std::string getDataFilePath();
+
+	static std::string getDLLFilePath();
+
 	IPCWithClient();
 
 	BOOL waitForClientToConnect();
 
 	void readClientInput();
+
+	int getThreadsCount();
+
+	int getInputBlockDivisionSizeInBytes();
+
+	ProcessingEntity getProcessingEntity();
+
+	const char* getDelimeters();
 
 	~IPCWithClient();
 
@@ -37,6 +43,9 @@ private:
 	
 	static LPCSTR dataPipeName;
 	static LPCSTR debugPipeName;
+
+	uint32_t threadsCount;
+	uint32_t inputBlockDivisionSizeInBytes;
 
 	ProcessingEntity processingEntity;
 

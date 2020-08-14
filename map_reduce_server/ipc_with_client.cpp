@@ -12,6 +12,17 @@ const std::string IPCWithClient::dataFileName = "data.txt";
 LPCSTR IPCWithClient::dataPipeName = "\\\\.\\pipe\\map_reduce";
 LPCSTR IPCWithClient::debugPipeName = "\\\\.\\pipe\\map_reduce_debug";
 
+
+string IPCWithClient::getDataFilePath()
+{
+	return clientInputDirName + dataFileName;
+}
+
+string IPCWithClient::getDLLFilePath()
+{
+	return clientInputDirName + dllFileName;
+}
+
 IPCWithClient::IPCWithClient()
 {
 	cout << nBufferSize << endl;
@@ -50,16 +61,6 @@ BOOL IPCWithClient::waitForClientToConnect()
 
 void IPCWithClient::readClientInput()
 {
-	//uint32_t number;
-	//cout << readNumberFromPipe(dataPipeHandle, &number) << endl;
-	//cout << "number is " << number << endl;
-	//
-	//cout << readFileFromPipe(dataPipeHandle, "hello.txt", dataPipeReadAndWriteBuffer, nBufferSize) << endl;
-	//
-	//char arr[100];
-	//cout << readStringFromPipe(dataPipeHandle, arr);
-	//cout << "Array is " << arr << endl;
-
 	const char* pathToDll = (clientInputDirName + dllFileName).c_str();
 	readFileFromPipe(dataPipeHandle, pathToDll, dataPipeReadAndWriteBuffer, nBufferSize);
 
@@ -71,6 +72,27 @@ void IPCWithClient::readClientInput()
 	processingEntity = static_cast<ProcessingEntity>(tmp);
 
 	readStringFromPipe(dataPipeHandle, delimeters);
+
+	readNumberFromPipe(dataPipeHandle, &threadsCount);
+
+	// If the client hasn't specified the number of threads, then
+	// the server determines the number of threads by querying
+	// the system for the number of CPU cores. The number of threads will
+	// be the number of CPU cores minus 1 (1 core is used for the main thread
+	// the task scheduler).
+	if (threadsCount == 0) {
+		SYSTEM_INFO sysinfo;
+		GetSystemInfo(&sysinfo);
+		threadsCount = sysinfo.dwNumberOfProcessors - 1;
+	}
+	
+	readNumberFromPipe(dataPipeHandle, &inputBlockDivisionSizeInBytes);
+	if (inputBlockDivisionSizeInBytes == 0) {
+		inputBlockDivisionSizeInBytes = 4096;
+	}
+
+	cout << "threadsCount is "<<threadsCount << endl;
+	cout << "inputBlockDivisionSizeInBytes is "<< inputBlockDivisionSizeInBytes << endl;
 }
 
 void IPCWithClient::closePipe(HANDLE pipeHandle)
@@ -78,6 +100,26 @@ void IPCWithClient::closePipe(HANDLE pipeHandle)
 	FlushFileBuffers(pipeHandle);
 	DisconnectNamedPipe(pipeHandle);
 	CloseHandle(pipeHandle);
+}
+
+int IPCWithClient::getThreadsCount()
+{
+	return threadsCount;
+}
+
+int IPCWithClient::getInputBlockDivisionSizeInBytes()
+{
+	return inputBlockDivisionSizeInBytes;
+}
+
+ProcessingEntity IPCWithClient::getProcessingEntity()
+{
+	return processingEntity;
+}
+
+const char* IPCWithClient::getDelimeters()
+{
+	return delimeters;
 }
 
 IPCWithClient::~IPCWithClient()

@@ -1,28 +1,25 @@
 #include<windows.h>
 #include<cstdint>
+#include "processing_entity.h"
 
 #ifndef IPC_WITH_SERVER
 #define IPC_WITH_SERVER
-
-enum ProcessingEntity
-{
-	SYMBOL_ENTITY,
-	WORD_ENTITY,
-	LINE_ENTITY,
-	PROCESSING_ENTITY_COUNT
-};
 
 class IPCWithServer
 {
 public:
 	IPCWithServer(const char *pathToDll, const char *pathToDataFile,
-		ProcessingEntity processingEntity, const char* delimeters);
+		ProcessingEntity processingEntity, const char* delimeters,
+		uint32_t threadsCount, uint32_t inputBlockDivisionSizeInBytes);
 
 	void sendInputToServer();
 
 	~IPCWithServer();
 
 private:
+	uint32_t threadsCount;
+	uint32_t inputBlockDivisionSizeInBytes;
+
 	static LPCSTR pipeName;
 	HANDLE pHandle;
 
