@@ -18,7 +18,7 @@ void Worker::start()
 	std::pair<int, int> taskScope;
 
 	while (tasksPool.nextTask(taskScope)) {
-		
+
 		// Each word that we want to process lies in the interval [begin, end)
 		// We want to find the values of begin and end;
 		int begin = taskScope.first;
@@ -26,20 +26,20 @@ void Worker::start()
 		while (begin < taskScope.second) {
 
 			// shile begin is a delimiter, move on to the next symbol
-			while (strchr(delimiters, data[begin]) != nullptr) {
+			while (begin < taskScope.second
+				&& strchr(delimiters, data[begin]) != nullptr) {
 				++begin;
-				if (begin >= taskScope.second) {
-					break;
-				}
 			}
+
 			if (begin >= taskScope.second) {
 				break;
 			}
 
 			int end = begin + 1;
+
 			// while end is not a delimiter and not outside the task's scope
-			while ((strchr(delimiters, data[begin]) == nullptr) 
-				&& end < taskScope.second) {
+			while (end < taskScope.second
+				&& (strchr(delimiters, data[end]) == nullptr)) {
 				++end;
 			}
 

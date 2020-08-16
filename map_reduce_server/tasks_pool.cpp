@@ -10,7 +10,7 @@ TasksPool::TasksPool(const char* dataFilePath, const char* delimeters,
 	processingEntity(processingEntity),
 	inputBlockDivisionSizeInBytes(inputBlockDivisionSizeInBytes)
 {
-	ifstream file(dataFilePath, ifstream::ate);
+	ifstream file(dataFilePath, ifstream::ate | ifstream::binary);
 
 	fileSize = static_cast<int>(file.tellg());
 
@@ -68,10 +68,8 @@ void TasksPool::arrangeTheDataIntoTasks()
 	do {
 		int end = std::min(begin + inputBlockDivisionSizeInBytes, fileSize);
 
-		if (end < fileSize) {
-			while (end < fileSize && strchr(delimeters, data[end]) == nullptr) {
-				++end;
-			}
+		while (end < fileSize && strchr(delimeters, data[end]) == nullptr) {
+			++end;
 		}
 
 		tasks.push_back(std::pair<int, int>(begin, end));
